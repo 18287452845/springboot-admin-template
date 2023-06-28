@@ -18,15 +18,13 @@ public class AuthController{
     private UserService userService;
 
     @RequestMapping("/login")
-    public R login(@RequestBody User user){
+    public SaResult login(@RequestBody User user){
         boolean login = userService.login(user);
         if (login) {
             StpUtil.login(user.getName());
             SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
-
-            System.out.println(R.ok(tokenInfo.getTokenValue()));
-            return R.ok(tokenInfo.getTokenValue());
+            return SaResult.ok("登录成功").setData(tokenInfo);
         }
-        return R.fail();
+        return SaResult.error("登录失败");
     }
 }
